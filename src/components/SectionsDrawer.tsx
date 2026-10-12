@@ -5,29 +5,25 @@ interface SectionsDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectSection: (section: string) => void;
-  onOpenGame: (game: 'wordle' | 'connections' | 'spellingbee' | 'mini') => void;
+  onOpenNewsletter: () => void;
 }
 
-const DESKS = [
+const LEMONDE_DESKS = [
   {
-    category: 'NEWS',
-    items: ['World', 'U.S.', 'Politics', 'Business', 'Tech', 'Science', 'Health', 'Sports', 'Climate', 'Education', 'Weather']
+    category: 'NEWS & POLITICS',
+    items: ['World', 'French politics', 'France', 'Economy', 'Environment', 'Sciences', 'Health', 'Education', 'Campus']
   },
   {
-    category: 'OPINION',
-    items: ['Today’s Opinion', 'Columnists', 'Editorials', 'Guest Essays', 'Letters', 'Sunday Opinion']
+    category: 'ANALYSIS & OPINION',
+    items: ['Opinion', 'Editorials', 'Columns', 'Analysis', 'Les Décodeurs', 'Investigation']
   },
   {
-    category: 'ARTS & CULTURE',
-    items: ['Arts', 'Books', 'Movies', 'Music', 'Television', 'Theater', 'Visual Arts', 'Dance']
+    category: 'CULTURE & LIFESTYLE',
+    items: ['Culture', 'M International', 'Cinema & Series', 'Books & Literature', 'Music', 'Visual Arts', 'Sports', 'L’Époque']
   },
   {
-    category: 'LIVING & LIFESTYLE',
-    items: ['Style', 'Food', 'Travel', 'Magazine', 'T Magazine', 'Real Estate', 'Love & Relationships', 'Well']
-  },
-  {
-    category: 'SPECIAL STANDALONES',
-    items: ['Cooking', 'Wirecutter', 'The Athletic', 'NYT Games', 'Audio & Podcasts', 'Video']
+    category: 'SPECIAL DEPARTMENTS',
+    items: ['Le Monde Africa', 'Pixels (Tech)', 'Podcasts & Audio', 'Video Investigations', 'Archives (Since 1944)']
   }
 ];
 
@@ -35,7 +31,7 @@ export const SectionsDrawer: React.FC<SectionsDrawerProps> = ({
   isOpen,
   onClose,
   onSelectSection,
-  onOpenGame
+  onOpenNewsletter
 }) => {
   const [filter, setFilter] = useState('');
 
@@ -45,16 +41,17 @@ export const SectionsDrawer: React.FC<SectionsDrawerProps> = ({
     <div className="fixed inset-0 z-50 flex">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 transition-opacity"
+        className="fixed inset-0 bg-black/60 transition-opacity"
         onClick={onClose}
       />
 
       {/* Drawer */}
       <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col z-10 overflow-hidden">
-        {/* Top Header */}
+        {/* Header */}
         <div className="p-4 border-b border-[#e2e2e2] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="font-masthead-title text-2xl text-black">The New York Times</h2>
+          <div className="flex items-baseline gap-2">
+            <h2 className="font-lemonde-logo text-3xl font-bold text-black">Le Monde</h2>
+            <span className="text-[11px] uppercase font-bold text-neutral-500 tracking-wider">in English</span>
           </div>
           <button
             onClick={onClose}
@@ -64,72 +61,42 @@ export const SectionsDrawer: React.FC<SectionsDrawerProps> = ({
           </button>
         </div>
 
-        {/* Search input in drawer */}
+        {/* Search */}
         <div className="p-4 border-b border-[#e2e2e2] bg-neutral-50">
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-2.5 text-neutral-400" />
             <input
               type="text"
-              placeholder="Search sections or topics..."
+              placeholder="Search Le Monde sections or topics..."
               value={filter}
               onChange={e => setFilter(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs border border-neutral-300 rounded bg-white focus:outline-none focus:border-black"
+              className="w-full pl-9 pr-3 py-2 text-xs border border-neutral-300 rounded-xs bg-white focus:outline-none focus:border-black"
             />
           </div>
         </div>
 
         {/* Section List */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
-          {/* Quick Playable Games Shortcut */}
-          <div className="p-3 bg-neutral-100 rounded border border-neutral-200">
-            <span className="font-sans font-bold text-[11px] uppercase tracking-wider text-black block mb-2">
-              Daily NYT Games
+          {/* Newsletter Shortcut */}
+          <div className="p-3.5 bg-[#fffdec] border border-amber-200 rounded-xs">
+            <span className="font-bold text-xs uppercase tracking-wider text-black block mb-1">
+              Daily Selection Newsletter
             </span>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <button
-                onClick={() => {
-                  onClose();
-                  onOpenGame('wordle');
-                }}
-                className="p-2 bg-white rounded border border-neutral-200 text-left hover:border-black transition-colors"
-              >
-                <strong className="block text-black">Wordle</strong>
-                <span className="text-[10px] text-neutral-500">Solve daily 5-letter word</span>
-              </button>
-              <button
-                onClick={() => {
-                  onClose();
-                  onOpenGame('connections');
-                }}
-                className="p-2 bg-white rounded border border-neutral-200 text-left hover:border-black transition-colors"
-              >
-                <strong className="block text-black">Connections</strong>
-                <span className="text-[10px] text-neutral-500">Group words into 4s</span>
-              </button>
-              <button
-                onClick={() => {
-                  onClose();
-                  onOpenGame('mini');
-                }}
-                className="p-2 bg-white rounded border border-neutral-200 text-left hover:border-black transition-colors"
-              >
-                <strong className="block text-black">The Mini</strong>
-                <span className="text-[10px] text-neutral-500">Quick 5x5 Crossword</span>
-              </button>
-              <button
-                onClick={() => {
-                  onClose();
-                  onOpenGame('spellingbee');
-                }}
-                className="p-2 bg-white rounded border border-neutral-200 text-left hover:border-black transition-colors"
-              >
-                <strong className="block text-black">Spelling Bee</strong>
-                <span className="text-[10px] text-neutral-500">Find words in honey hive</span>
-              </button>
-            </div>
+            <p className="text-xs text-neutral-700 mb-2">
+              Get our daily translation of Le Monde delivered free to your inbox.
+            </p>
+            <button
+              onClick={() => {
+                onClose();
+                onOpenNewsletter();
+              }}
+              className="bg-black hover:bg-neutral-800 text-white text-xs font-bold px-3 py-1.5 rounded-xs cursor-pointer"
+            >
+              Sign up for free
+            </button>
           </div>
 
-          {DESKS.map(desk => {
+          {LEMONDE_DESKS.map(desk => {
             const filteredItems = desk.items.filter(i =>
               i.toLowerCase().includes(filter.toLowerCase())
             );
@@ -138,7 +105,7 @@ export const SectionsDrawer: React.FC<SectionsDrawerProps> = ({
 
             return (
               <div key={desk.category}>
-                <h4 className="font-sans font-bold text-[11px] uppercase tracking-wider text-[#727272] mb-2 pb-1 border-b border-[#e2e2e2]">
+                <h4 className="font-sans font-bold text-[11px] uppercase tracking-wider text-[#666] mb-2 pb-1 border-b border-[#e2e2e2]">
                   {desk.category}
                 </h4>
                 <ul className="space-y-1">
@@ -149,9 +116,11 @@ export const SectionsDrawer: React.FC<SectionsDrawerProps> = ({
                           onSelectSection(item);
                           onClose();
                         }}
-                        className="w-full text-left py-1.5 px-2 text-xs font-serif text-neutral-800 hover:text-black hover:bg-neutral-100 rounded flex items-center justify-between group transition-colors"
+                        className="w-full text-left py-1.5 px-2 text-xs font-serif text-neutral-900 hover:text-black hover:bg-neutral-100 rounded flex items-center justify-between group transition-colors cursor-pointer"
                       >
-                        <span>{item}</span>
+                        <span className={item === 'Les Décodeurs' ? 'text-[#005691] font-bold' : ''}>
+                          {item}
+                        </span>
                         <ChevronRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-black transition-colors" />
                       </button>
                     </li>
@@ -162,9 +131,9 @@ export const SectionsDrawer: React.FC<SectionsDrawerProps> = ({
           })}
         </div>
 
-        {/* Footer in Drawer */}
+        {/* Footer */}
         <div className="p-4 bg-neutral-50 border-t border-[#e2e2e2] text-center text-xs text-neutral-500">
-          <span>The New York Times International Edition</span>
+          <span>Le Monde in English · Paris</span>
         </div>
       </div>
     </div>

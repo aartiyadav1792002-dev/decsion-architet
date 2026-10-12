@@ -1,3 +1,34 @@
+export interface LeMondeArticle {
+  id: string;
+  title: string;
+  frenchTitle?: string;
+  deck: string;
+  frenchDeck?: string;
+  kicker?: string;
+  kickerColor?: string;
+  isSubscriberOnly: boolean;
+  author: string;
+  authorLocation?: string;
+  authorRole?: string;
+  readTime: string;
+  publishedAt: string;
+  section: string;
+  imageUrl?: string;
+  imageCaption?: string;
+  imageCredit?: string;
+  content: string[];
+  frenchContent?: string[];
+  pullQuote?: {
+    quote: string;
+    attribution: string;
+  };
+  commentsCount?: number;
+  isEditorPick?: boolean;
+  mostReadRank?: number;
+}
+
+export type LanguageMode = 'en' | 'fr';
+
 export interface Article {
   id: string;
   title: string;

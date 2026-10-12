@@ -4,69 +4,57 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Header } from './components/Header';
-import { FrontPage } from './components/FrontPage';
-import { ArticleView } from './components/ArticleView';
-import { Footer } from './components/Footer';
-import { WordleModal } from './components/WordleModal';
-import { ConnectionsModal } from './components/ConnectionsModal';
-import { TheMiniModal } from './components/TheMiniModal';
-import { SpellingBeeModal } from './components/SpellingBeeModal';
+import { LeMondeHeader } from './components/LeMondeHeader';
+import { LeMondeFrontPage } from './components/LeMondeFrontPage';
+import { LeMondeArticleView } from './components/LeMondeArticleView';
+import { LeMondeFooter } from './components/LeMondeFooter';
+import { LeMondeSubscribeModal } from './components/LeMondeSubscribeModal';
+import { LeMondeNewsletterModal } from './components/LeMondeNewsletterModal';
 import { SectionsDrawer } from './components/SectionsDrawer';
 import { SearchModal } from './components/SearchModal';
-import { SubscribeModal } from './components/SubscribeModal';
 import { LoginModal } from './components/LoginModal';
-import { AudioPlayer } from './components/AudioPlayer';
-import { LiveUpdatesModal } from './components/LiveUpdatesModal';
-import { TodaysPaperModal } from './components/TodaysPaperModal';
 import { SavedArticlesModal } from './components/SavedArticlesModal';
-import { SurveyToast } from './components/SurveyToast';
-import { ARTICLES } from './data/articles';
-import { Article, Edition } from './types';
+import { LEMONDE_ARTICLES } from './data/lemonde_articles';
+import { LanguageMode } from './types';
 
 export default function App() {
-  const [currentEdition, setCurrentEdition] = useState<Edition>('INTERNATIONAL');
+  const [language, setLanguage] = useState<LanguageMode>('en');
   const [activeArticleId, setActiveArticleId] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string>('All');
   const [savedIds, setSavedIds] = useState<string[]>(() => {
     try {
-      const stored = localStorage.getItem('nyt_saved_articles');
-      return stored ? JSON.parse(stored) : ['saudi-yemeni-airports'];
+      const stored = localStorage.getItem('lemonde_saved_articles');
+      return stored ? JSON.parse(stored) : ['france-nation-on-edge'];
     } catch {
-      return ['saudi-yemeni-airports'];
+      return ['france-nation-on-edge'];
     }
   });
 
   // Modals state
-  const [activeGame, setActiveGame] = useState<'wordle' | 'connections' | 'spellingbee' | 'mini' | null>(null);
-  const [isSectionsOpen, setIsSectionsOpen] = useState<boolean>(false);
-  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
-  const [isSubscribeOpen, setIsSubscribeOpen] = useState<boolean>(false);
-  const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
-  const [isLiveUpdatesOpen, setIsLiveUpdatesOpen] = useState<boolean>(false);
-  const [isTodaysPaperOpen, setIsTodaysPaperOpen] = useState<boolean>(false);
-  const [isSavedOpen, setIsSavedOpen] = useState<boolean>(false);
+  const [isSectionsOpen, setIsSectionsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
+  const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSavedOpen, setIsSavedOpen] = useState(false);
 
-  // Audio track state
-  const [audioArticle, setAudioArticle] = useState<Article | null>(null);
-
-  // User notification for brief catch-up
+  // User notification toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     try {
-      localStorage.setItem('nyt_saved_articles', JSON.stringify(savedIds));
+      localStorage.setItem('lemonde_saved_articles', JSON.stringify(savedIds));
     } catch (e) {
       console.error(e);
     }
   }, [savedIds]);
 
-  // Scroll to top on article switch
+  // Scroll to top when selecting an article
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeArticleId]);
 
-  const activeArticle = ARTICLES.find(a => a.id === activeArticleId);
+  const activeArticle = LEMONDE_ARTICLES.find(a => a.id === activeArticleId);
 
   const handleToggleSave = (articleId: string) => {
     if (savedIds.includes(articleId)) {
@@ -88,31 +76,8 @@ export default function App() {
 
   const handleSelectSection = (section: string) => {
     setActiveSection(section);
-    if (section === 'Games') {
-      setActiveGame('wordle');
-      return;
-    }
-    if (section === 'Wirecutter') {
-      setActiveArticleId('wirecutter-headphones');
-      return;
-    }
-    if (section === 'Cooking') {
-      setActiveArticleId('nyt-cooking-roman-autumn-stew');
-      return;
-    }
-    if (section === 'The Athletic') {
-      setActiveArticleId('champions-league-tactics-no-9');
-      return;
-    }
-    if (section === 'Audio') {
-      const audioArt = ARTICLES.find(a => a.hasAudio) || ARTICLES[0];
-      setAudioArticle(audioArt);
-      return;
-    }
-
-    // Filter to first matching article if currently on article view, or return to front
     if (activeArticleId) {
-      const match = ARTICLES.find(a => a.section.toLowerCase() === section.toLowerCase());
+      const match = LEMONDE_ARTICLES.find(a => a.section.toLowerCase() === section.toLowerCase());
       if (match) {
         setActiveArticleId(match.id);
       } else {
@@ -121,35 +86,36 @@ export default function App() {
     }
   };
 
-  const handleOpenCatchUp = (topic: string) => {
-    setToastMessage(`Selected briefing: ${topic}`);
-    setTimeout(() => setToastMessage(null), 3500);
+  const toggleLanguage = () => {
+    const next = language === 'en' ? 'fr' : 'en';
+    setLanguage(next);
+    setToastMessage(next === 'fr' ? 'Édition affichée en français' : 'Switched to Le Monde in English');
+    setTimeout(() => setToastMessage(null), 2500);
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#121212] flex flex-col font-sans selection:bg-[#121212] selection:text-white">
+    <div className="min-h-screen bg-white text-[#1a1a1a] flex flex-col font-sans selection:bg-[#FFE000] selection:text-black">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-16 right-4 z-50 bg-[#121212] text-white text-xs px-4 py-2.5 rounded shadow-xl flex items-center gap-2 max-w-sm animate-fade-in border border-neutral-700 font-serif">
+        <div className="fixed top-16 right-4 z-50 bg-[#1a1a1a] text-white text-xs px-4 py-2.5 rounded-xs shadow-xl flex items-center gap-2 max-w-sm animate-fade-in border border-neutral-700 font-sans">
           <span>{toastMessage}</span>
           <button
             onClick={() => setToastMessage(null)}
-            className="text-neutral-400 hover:text-white font-sans text-xs ml-auto"
+            className="text-neutral-400 hover:text-white font-sans text-xs ml-auto cursor-pointer"
           >
             ✕
           </button>
         </div>
       )}
 
-      {/* Main Header */}
-      <Header
-        currentEdition={currentEdition}
-        onSelectEdition={setCurrentEdition}
+      {/* Main Le Monde Header */}
+      <LeMondeHeader
+        language={language}
+        onToggleLanguage={toggleLanguage}
         onOpenSections={() => setIsSectionsOpen(true)}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenSubscribe={() => setIsSubscribeOpen(true)}
         onOpenLogin={() => setIsLoginOpen(true)}
-        onOpenTodaysPaper={() => setIsTodaysPaperOpen(true)}
         onSelectSection={handleSelectSection}
         activeSection={activeSection}
         savedCount={savedIds.length}
@@ -157,112 +123,80 @@ export default function App() {
         onGoHome={handleBackToFront}
       />
 
-      {/* Main Content: Broadsheet Front Page or Full Article View */}
+      {/* Content Area: Front Page or Full Article View */}
       <div className="flex-1">
         {activeArticle ? (
-          <ArticleView
+          <LeMondeArticleView
             article={activeArticle}
+            language={language}
+            onToggleLanguage={toggleLanguage}
             onBack={handleBackToFront}
             onOpenArticle={handleOpenArticle}
-            allArticles={ARTICLES}
+            allArticles={LEMONDE_ARTICLES}
             isSaved={savedIds.includes(activeArticle.id)}
             onToggleSave={handleToggleSave}
-            onPlayAudio={art => setAudioArticle(art)}
+            onOpenSubscribe={() => setIsSubscribeOpen(true)}
           />
         ) : (
-          <FrontPage
-            articles={ARTICLES}
+          <LeMondeFrontPage
+            articles={LEMONDE_ARTICLES}
+            language={language}
             onOpenArticle={handleOpenArticle}
-            onOpenLiveUpdates={() => setIsLiveUpdatesOpen(true)}
-            onOpenGame={game => setActiveGame(game)}
-            onOpenWirecutter={() => handleOpenArticle('wirecutter-headphones')}
-            onOpenCatchUp={handleOpenCatchUp}
+            onOpenSubscribe={() => setIsSubscribeOpen(true)}
+            onOpenNewsletter={() => setIsNewsletterOpen(true)}
           />
         )}
       </div>
 
-      {/* Footer */}
-      <Footer
+      {/* Le Monde Footer */}
+      <LeMondeFooter
         onSelectSection={handleSelectSection}
         onOpenSubscribe={() => setIsSubscribeOpen(true)}
-        onOpenGame={game => setActiveGame(game)}
+        onOpenNewsletter={() => setIsNewsletterOpen(true)}
         onGoHome={handleBackToFront}
       />
 
-      {/* Floating Survey Widget */}
-      <SurveyToast />
-
-      {/* Floating Audio Bar */}
-      <AudioPlayer
-        article={audioArticle}
-        onClose={() => setAudioArticle(null)}
-      />
-
-      {/* Interactive Game Modals */}
-      <WordleModal
-        isOpen={activeGame === 'wordle'}
-        onClose={() => setActiveGame(null)}
-      />
-      <ConnectionsModal
-        isOpen={activeGame === 'connections'}
-        onClose={() => setActiveGame(null)}
-      />
-      <TheMiniModal
-        isOpen={activeGame === 'mini'}
-        onClose={() => setActiveGame(null)}
-      />
-      <SpellingBeeModal
-        isOpen={activeGame === 'spellingbee'}
-        onClose={() => setActiveGame(null)}
-      />
-
-      {/* App Drawer & Utility Modals */}
+      {/* Modals & Drawers */}
       <SectionsDrawer
         isOpen={isSectionsOpen}
         onClose={() => setIsSectionsOpen(false)}
         onSelectSection={handleSelectSection}
-        onOpenGame={game => setActiveGame(game)}
+        onOpenNewsletter={() => setIsNewsletterOpen(true)}
       />
 
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        articles={ARTICLES}
+        articles={LEMONDE_ARTICLES}
+        language={language}
         onOpenArticle={handleOpenArticle}
       />
 
-      <SubscribeModal
+      <LeMondeSubscribeModal
         isOpen={isSubscribeOpen}
         onClose={() => setIsSubscribeOpen(false)}
+      />
+
+      <LeMondeNewsletterModal
+        isOpen={isNewsletterOpen}
+        onClose={() => setIsNewsletterOpen(false)}
       />
 
       <LoginModal
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onSuccess={email => {
-          setToastMessage(`Welcome back, ${email}`);
+          setToastMessage(`Bienvenue, ${email}`);
           setTimeout(() => setToastMessage(null), 3000);
         }}
-      />
-
-      <LiveUpdatesModal
-        isOpen={isLiveUpdatesOpen}
-        onClose={() => setIsLiveUpdatesOpen(false)}
-        onOpenArticle={handleOpenArticle}
-      />
-
-      <TodaysPaperModal
-        isOpen={isTodaysPaperOpen}
-        onClose={() => setIsTodaysPaperOpen(false)}
-        articles={ARTICLES}
-        onOpenArticle={handleOpenArticle}
       />
 
       <SavedArticlesModal
         isOpen={isSavedOpen}
         onClose={() => setIsSavedOpen(false)}
         savedIds={savedIds}
-        allArticles={ARTICLES}
+        allArticles={LEMONDE_ARTICLES}
+        language={language}
         onOpenArticle={handleOpenArticle}
         onRemoveSaved={handleToggleSave}
       />

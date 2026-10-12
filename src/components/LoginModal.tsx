@@ -24,13 +24,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-      <div className="bg-white max-w-sm w-full rounded-lg shadow-2xl overflow-hidden border border-neutral-200">
+    <div className="fixed inset-0 z-50 bg-black/65 flex items-center justify-center p-4">
+      <div className="bg-white max-w-sm w-full rounded-xs shadow-2xl overflow-hidden border border-neutral-300">
         <div className="flex justify-between items-center px-6 pt-5 pb-3 border-b border-[#e2e2e2]">
-          <h2 className="font-masthead-title text-2xl text-black">The New York Times</h2>
+          <div className="flex items-baseline gap-2">
+            <h3 className="font-lemonde-logo text-3xl font-bold text-black">Le Monde</h3>
+            <span className="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Compte</span>
+          </div>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-neutral-100 rounded text-neutral-600 transition-colors"
+            className="p-1 hover:bg-neutral-100 rounded text-neutral-500 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -38,16 +41,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
 
         <div className="p-6 space-y-4">
           <div className="text-center">
-            <h3 className="font-serif font-bold text-xl text-black">Log in or create an account</h3>
-            <p className="text-xs text-[#727272] mt-1">
-              Enter your email to continue to your Times account.
+            <h4 className="font-serif font-bold text-xl text-black">Sign in to Le Monde</h4>
+            <p className="text-xs text-[#666] mt-1">
+              Access your subscriptions, saved reading lists, and newsletters.
             </p>
           </div>
 
           {submitted ? (
             <div className="py-4 text-center text-xs text-emerald-700 font-medium flex items-center justify-center gap-1.5">
               <Check className="w-4 h-4" />
-              <span>Signed in successfully as {email}</span>
+              <span>Signed in as {email}</span>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
@@ -61,13 +64,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
                   placeholder="name@example.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="w-full text-xs p-2.5 border border-neutral-300 rounded focus:border-black focus:outline-none"
+                  className="w-full text-xs p-2.5 border border-neutral-300 rounded-xs focus:border-black focus:outline-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-black hover:bg-neutral-800 text-white py-2.5 rounded font-semibold text-xs transition-colors cursor-pointer"
+                className="w-full bg-[#FFE000] hover:bg-[#e6ca00] text-black py-2.5 rounded-xs font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer shadow-xs"
               >
                 Continue with Email
               </button>
@@ -89,7 +92,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
                     onClose();
                   }, 1000);
                 }}
-                className="w-full border border-neutral-300 hover:bg-neutral-50 text-neutral-800 py-2 rounded text-xs font-medium flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                className="w-full border border-neutral-300 hover:bg-neutral-50 text-neutral-800 py-2 rounded-xs text-xs font-medium flex items-center justify-center gap-2 cursor-pointer transition-colors"
               >
                 <span>Continue with Google</span>
               </button>
@@ -104,7 +107,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
                     onClose();
                   }, 1000);
                 }}
-                className="w-full border border-neutral-300 hover:bg-neutral-50 text-neutral-800 py-2 rounded text-xs font-medium flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                className="w-full border border-neutral-300 hover:bg-neutral-50 text-neutral-800 py-2 rounded-xs text-xs font-medium flex items-center justify-center gap-2 cursor-pointer transition-colors"
               >
                 <span>Continue with Apple</span>
               </button>
@@ -112,7 +115,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSucce
           )}
 
           <p className="text-[10px] text-neutral-400 text-center leading-normal">
-            By continuing, you agree to the Terms of Service and Privacy Policy of The New York Times Company.
+            By signing in, you agree to the Terms of Service and Privacy Policy of Groupe Le Monde.
           </p>
         </div>
       </div>
