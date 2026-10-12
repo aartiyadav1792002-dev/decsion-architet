@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --font-masthead: "UnifrakturMaguntia", "Cinzel", Georgia, serif;
+  --font-serif: "Newsreader", "Source Serif 4", Georgia, Cambria, serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
+  --color-nyt-black: #121212;
+  --color-nyt-grayDark: #363636;
+  --color-nyt-grayMuted: #727272;
+  --color-nyt-grayLight: #ebebeb;
+  --color-nyt-border: #e2e2e2;
+  --color-nyt-accentBlue: #567b95;
+  --color-nyt-btnBlue: #00628e;
+  --color-nyt-btnBlueHover: #004c6e;
+}
+
+.font-masthead-title {
+  font-family: "UnifrakturMaguntia", "Cinzel", Georgia, serif;
+  letter-spacing: -0.5px;
+}
+
+.headline-editorial {
+  font-family: "Newsreader", "Playfair Display", Georgia, serif;
+  line-height: 1.15;
+}
+
+.subheadline-editorial {
+  font-family: "Newsreader", "Source Serif 4", Georgia, serif;
+  line-height: 1.35;
+}
+
+.border-nyt-double {
+  border-top: 1px solid #121212;
+  border-bottom: 1px solid #121212;
+  height: 4px;
+}
+
+.border-col {
+  border-right: 1px solid #e2e2e2;
+}
+
+.border-row {
+  border-bottom: 1px solid #e2e2e2;
+}
